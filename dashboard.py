@@ -14,13 +14,11 @@ st.set_page_config(
 # =========================
 # LOAD DATA (DEPLOY-SAFE PATHS)
 # =========================
-BASE_PATH = "analysis/outputs/"
-
-sku = pd.read_csv(BASE_PATH + "sku_master_clean.csv")
-temp_violations = pd.read_csv(BASE_PATH + "temperature_violations.csv")
-high_risk_temp = pd.read_csv(BASE_PATH + "high_risk_temperature_violations.csv")
-weight_violations = pd.read_csv(BASE_PATH + "weight_violations.csv")
-avg_picker_load = pd.read_csv(BASE_PATH + "average_picker_load.csv")
+sku = pd.read_csv("sku_master_clean.csv")
+temp_violations = pd.read_csv("temperature_violations.csv")
+high_risk_temp = pd.read_csv("high_risk_temperature_violations.csv")
+weight_violations = pd.read_csv("weight_violations.csv")
+avg_picker_load = pd.read_csv("average_picker_load.csv")
 
 # =========================
 # GLOBAL STYLES
@@ -173,4 +171,3 @@ st.warning(
     "Forklift Constraint: Forklifts are restricted from entering Aisle B when more than "
     "two pickers are present, creating a dead-zone under peak load conditions."
 )
-
