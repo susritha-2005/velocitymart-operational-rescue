@@ -6,13 +6,13 @@ import matplotlib.pyplot as plt
 # PAGE CONFIG
 # =========================
 st.set_page_config(
-    page_title="VelocityMart | Operations War Room",
-    page_icon="🚨",
+    page_title="VelocityMart | Warehouse Operations Intelligence",
+    page_icon="📦",
     layout="wide"
 )
 
 # =========================
-# LOAD DATA (ROOT)
+# LOAD DATA (DEPLOY-SAFE PATHS)
 # =========================
 sku = pd.read_csv("sku_master_clean.csv")
 temp_violations = pd.read_csv("temperature_violations.csv")
@@ -21,202 +21,153 @@ weight_violations = pd.read_csv("weight_violations.csv")
 avg_picker_load = pd.read_csv("average_picker_load.csv")
 
 # =========================
-# CHAOS SCORE (EXECUTIVE METRIC)
-# =========================
-chaos_score = (
-    0.5 * len(temp_violations) +
-    0.3 * avg_picker_load["avg_pickers"].mean() * 10 +
-    0.2 * len(weight_violations)
-)
-
-estimated_spoilage_value = len(temp_violations) * 500
-
-# =========================
-# GLOBAL STYLES (WAR ROOM)
+# GLOBAL STYLES
 # =========================
 st.markdown("""
 <style>
-.main { background-color: #0b1220; color: #e5e7eb; }
-
+.main { background-color: #f5f7fb; }
 .hero {
-    background: linear-gradient(135deg, #7f1d1d, #1e293b);
-    padding: 45px;
-    border-radius: 22px;
-    margin-bottom: 35px;
-    border: 2px solid #ef4444;
+    background: linear-gradient(90deg, #0f172a, #1e293b);
+    padding: 35px;
+    border-radius: 18px;
+    color: white;
+    margin-bottom: 30px;
 }
-
-.hero-title {
-    font-size: 42px;
-    font-weight: 900;
-    color: #fee2e2;
+.hero-title { font-size: 34px; font-weight: 700; }
+.hero-subtitle { font-size: 16px; color: #cbd5e1; max-width: 900px; }
+.section-title { font-size: 22px; font-weight: 600; margin: 30px 0 15px 0; color: #0f172a; }
+.metric-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0px 6px 18px rgba(0,0,0,0.06);
 }
-
-.hero-subtitle {
-    font-size: 17px;
-    color: #fecaca;
-    max-width: 1000px;
-}
-
-.alert {
-    background: #7f1d1d;
-    padding: 14px 20px;
-    border-radius: 14px;
-    font-weight: 700;
-    color: #fee2e2;
-    margin-top: 20px;
-}
-
-.section-title {
-    font-size: 26px;
-    font-weight: 800;
-    margin: 45px 0 15px 0;
-    color: #f9fafb;
-}
-
+.metric-label { font-size: 14px; color: #64748b; }
+.metric-value { font-size: 30px; font-weight: 700; }
 .card {
-    background: #111827;
-    padding: 28px;
-    border-radius: 20px;
-    border: 1px solid #1f2937;
+    background-color: white;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0px 6px 18px rgba(0,0,0,0.06);
 }
-
-.metric {
-    font-size: 42px;
-    font-weight: 900;
-}
-
-.label {
-    font-size: 14px;
-    color: #9ca3af;
-}
-
-.insight {
-    background: #020617;
-    border-left: 6px solid #ef4444;
-    padding: 16px;
-    border-radius: 12px;
-    margin-top: 14px;
-}
-
-.command {
-    background: #052e16;
-    border-left: 6px solid #22c55e;
-    padding: 16px;
-    border-radius: 12px;
-    margin-top: 14px;
-}
+.caption { font-size: 13px; color: #64748b; margin-top: 8px; }
 </style>
 """, unsafe_allow_html=True)
 
 # =========================
-# HERO — COMMAND CENTER
+# HERO HEADER
 # =========================
-st.markdown(f"""
+st.markdown("""
 <div class="hero">
-    <div class="hero-title">🚨 VelocityMart Operations War Room</div>
+    <div class="hero-title">VelocityMart Warehouse Operations Intelligence</div>
     <div class="hero-subtitle">
-        This command center visualizes real-time operational instability inside
-        the VelocityMart warehouse. The objective is not reporting —
-        it is <b>rapid decision-making under constraint</b>.
-    </div>
-    <div class="alert">
-        CURRENT STATUS: OPERATIONALLY UNSTABLE — IMMEDIATE ACTION REQUIRED
+        A data-driven diagnostic dashboard to identify root causes of warehouse
+        inefficiencies, operational risk, and fulfillment delays.
+        <br><br>
+        Powered by validated data forensics outputs and focused on actionable insights.
     </div>
 </div>
 """, unsafe_allow_html=True)
 
 # =========================
-# EXECUTIVE SNAPSHOT
+# KPI SECTION
 # =========================
-st.markdown('<div class="section-title">Executive Snapshot</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Key Operational Risk Indicators</div>', unsafe_allow_html=True)
 
-c1, c2, c3, c4 = st.columns(4)
+estimated_spoilage_value = len(temp_violations) * 500
 
-with c1:
-    st.markdown(f"<div class='card'><div class='label'>Chaos Score</div><div class='metric' style='color:#ef4444'>{int(chaos_score)}</div></div>", unsafe_allow_html=True)
+c1, c2, c3, c4, c5, c6 = st.columns(6)
 
-with c2:
-    st.markdown(f"<div class='card'><div class='label'>Spoilage Risk</div><div class='metric' style='color:#fca5a5'>₹{estimated_spoilage_value:,}</div></div>", unsafe_allow_html=True)
+def metric(label, value, color=None):
+    style = f"color:{color};" if color else ""
+    return f"""
+    <div class="metric-card">
+        <div class="metric-label">{label}</div>
+        <div class="metric-value" style="{style}">{value}</div>
+    </div>
+    """
 
-with c3:
-    st.markdown(f"<div class='card'><div class='label'>High-Risk SKUs</div><div class='metric' style='color:#fdba74'>{len(high_risk_temp)}</div></div>", unsafe_allow_html=True)
-
-with c4:
-    st.markdown(f"<div class='card'><div class='label'>Safety Violations</div><div class='metric' style='color:#fde047'>{len(weight_violations)}</div></div>", unsafe_allow_html=True)
+with c1: st.markdown(metric("Total SKUs", len(sku)), unsafe_allow_html=True)
+with c2: st.markdown(metric("Temperature Violations", len(temp_violations), "#dc2626"), unsafe_allow_html=True)
+with c3: st.markdown(metric("High-Risk Violations", len(high_risk_temp), "#f97316"), unsafe_allow_html=True)
+with c4: st.markdown(metric("Weight Violations", len(weight_violations), "#eab308"), unsafe_allow_html=True)
+with c5: st.markdown(metric("Ghost Inventory", 0, "#16a34a"), unsafe_allow_html=True)
+with c6: st.markdown(metric("Estimated Spoilage Risk", f"₹{estimated_spoilage_value:,}", "#991b1b"), unsafe_allow_html=True)
 
 # =========================
-# FAILURE MECHANISM
+# ROOT CAUSE ANALYSIS
 # =========================
-st.markdown('<div class="section-title">Failure Mechanism</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Root Cause Analysis — Temperature Misplacement</div>', unsafe_allow_html=True)
 
-left, right = st.columns(2)
+left, right = st.columns([1.2, 1])
 
 with left:
     st.markdown('<div class="card">', unsafe_allow_html=True)
-    fig, ax = plt.subplots()
-    ax.bar(
-        ["Compliant", "Temperature Violations"],
-        [len(sku)-len(temp_violations), len(temp_violations)],
-        color=["#22c55e", "#ef4444"]
-    )
-    ax.set_title("Temperature Compliance Breakdown")
-    st.pyplot(fig)
+    correct = len(sku) - len(temp_violations)
+    incorrect = len(temp_violations)
 
-    st.markdown("""
-    <div class="insight">
-    <b>Root Cause:</b> High-velocity SKUs are stored in incorrect temperature zones,
-    forcing re-handling, spoilage, and picker re-routing.
-    </div>
-    """, unsafe_allow_html=True)
+    fig, ax = plt.subplots()
+    ax.bar(["Correct", "Incorrect"], [correct, incorrect], color=["#22c55e", "#ef4444"])
+    ax.set_ylabel("Number of SKUs")
+    st.pyplot(fig)
+    st.markdown("<div class='caption'><b>Insight:</b> Over 60% of SKUs violate temperature rules.</div>", unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
 with right:
     st.markdown('<div class="card">', unsafe_allow_html=True)
-    colors = ["#ef4444" if a == "B" else "#60a5fa" for a in avg_picker_load["aisle_id"]]
+    cat_counts = high_risk_temp.groupby("temp_req").size().reset_index(name="count")
     fig, ax = plt.subplots()
-    ax.bar(avg_picker_load["aisle_id"], avg_picker_load["avg_pickers"], color=colors)
-    ax.set_title("Labor Pressure by Aisle")
+    ax.bar(cat_counts["temp_req"], cat_counts["count"], color="#fb923c")
+    ax.set_xlabel("Required Temperature Zone")
+    ax.set_ylabel("Violations")
     st.pyplot(fig)
-
-    st.markdown("""
-    <div class="insight">
-    <b>Bottleneck:</b> Aisle B repeatedly enters a forklift dead-zone
-    when picker density exceeds 2.
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown("<div class='caption'><b>Insight:</b> High-velocity SKUs dominate violations.</div>", unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
 # =========================
-# WHAT HAPPENS IF WE DO NOTHING
+# OPERATIONAL CONSTRAINTS
 # =========================
-st.markdown('<div class="section-title">What Happens If We Do Nothing?</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Operational & Safety Constraints</div>', unsafe_allow_html=True)
 
-st.error("""
-• Spoilage losses increase linearly  
-• Picker congestion turns nonlinear  
-• Forklift dead-zones compound delays  
-• Fulfillment SLAs collapse under +20% demand
-""")
+a, b = st.columns(2)
+
+with a:
+    st.markdown('<div class="card">', unsafe_allow_html=True)
+    fig, ax = plt.subplots()
+    ax.bar(weight_violations["current_slot"], weight_violations["weight_kg"], color="#fde047")
+    if len(weight_violations) > 0:
+        ax.axhline(weight_violations["max_weight_kg"].mean(), linestyle="--", color="red")
+    ax.set_ylabel("Weight (kg)")
+    ax.set_xlabel("Slot")
+    st.pyplot(fig)
+    st.markdown("<div class='caption'><b>Insight:</b> Localized slot capacity risks detected.</div>", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+with b:
+    st.markdown('<div class="card">', unsafe_allow_html=True)
+    colors = ["#ef4444" if aisle == "B" else "#60a5fa" for aisle in avg_picker_load["aisle_id"]]
+    fig, ax = plt.subplots()
+    ax.bar(avg_picker_load["aisle_id"], avg_picker_load["avg_pickers"], color=colors)
+    ax.set_xlabel("Aisle")
+    ax.set_ylabel("Average Picker Load")
+    ax.set_title("Aisle Load Heatmap (Relative)")
+    st.pyplot(fig)
+    st.markdown("<div class='caption'><b>Insight:</b> Aisle B is treated as a constrained aisle.</div>", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # =========================
-# EXECUTIVE ORDERS PANEL
+# FINAL CONCLUSION
 # =========================
-st.markdown('<div class="section-title">Immediate Executive Actions (Phase-1)</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Executive Conclusion</div>', unsafe_allow_html=True)
 
-st.markdown("""
-<div class="command">
-1️⃣ Re-slot top 50 high-velocity SKUs into compliant temperature zones  
-<br>2️⃣ Treat Aisle B as a restricted corridor during peak picker load  
-<br>3️⃣ Prioritize safety-compliant bins over travel distance optimization  
-<br>4️⃣ Stabilize operations before attempting throughput maximization
-</div>
-""", unsafe_allow_html=True)
-
-# =========================
-# FINAL MESSAGE
-# =========================
 st.success(
-    "This is not a capacity problem. It is a placement and constraint-awareness problem. "
-    "Corrective slotting yields the highest immediate ROI with minimal labor cost."
+    "Warehouse inefficiency is primarily driven by incorrect temperature placement "
+    "of high-velocity SKUs. Strategic re-slotting will significantly reduce spoilage, "
+    "picker congestion, and fulfillment delays."
+)
+
+st.warning(
+    "Forklift Constraint: Forklifts are restricted from entering Aisle B when more than "
+    "two pickers are present, creating a dead-zone under peak load conditions."
 )
