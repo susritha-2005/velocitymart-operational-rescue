@@ -1,0 +1,16 @@
+sku_id | old_slot | new_slot | reason
+SKU-10000,F05-B-01,D01-A-01,Fixed frozen SKU temperature mismatch
+SKU-10001,A19-F-19,C01-A-01,Refrigerated SKU moved to correct temperature zone
+SKU-10002,D02-B-12,A01-A-01,Ambient SKU relocated to ambient zone
+SKU-10004,B24-B-05,D01-A-02,Frozen SKU moved to freezer zone
+SKU-10005,F19-E-14,D01-A-03,High-velocity frozen SKU moved to correct temperature zone
+SKU-10006,C11-C-07,A01-A-02,Ambient SKU placed in correct ambient slot
+SKU-10007,E14-D-09,C01-A-02,Refrigerated SKU temperature compliance fix
+SKU-10008,B02-A-18,D01-A-04,Frozen SKU reassigned to freezer slot
+SKU-10009,A07-C-22,A01-A-03,Ambient SKU moved to appropriate temperature zone
+SKU-10010,F22-E-03,C01-A-03,Refrigerated high-demand SKU corrected
+SKU-10011,B18-B-11,D01-A-05,Frozen SKU relocated to freezer storage
+SKU-10012,D09-C-15,A01-A-04,Ambient SKU temperature mismatch resolved
+SKU-10013,A03-D-01,C01-A-04,Refrigerated SKU placed in chilled zone
+SKU-10014,F08-A-06,D01-A-06,Frozen SKU moved to freezer aisle
+SKU-10015,B30-E-17,A01-A-05,Ambient SKU correctly re-slotted
