@@ -12,9 +12,9 @@ st.set_page_config(
 )
 
 # =========================
-# LOAD DATA (CORRECT PATHS)
+# LOAD DATA (DEPLOY-SAFE PATHS)
 # =========================
-BASE_PATH = "../analysis/outputs/"
+BASE_PATH = "analysis/outputs/"
 
 sku = pd.read_csv(BASE_PATH + "sku_master_clean.csv")
 temp_violations = pd.read_csv(BASE_PATH + "temperature_violations.csv")
@@ -77,7 +77,7 @@ st.markdown("""
 # =========================
 st.markdown('<div class="section-title">Key Operational Risk Indicators</div>', unsafe_allow_html=True)
 
-estimated_spoilage_value = len(temp_violations) * 500  # Assumption
+estimated_spoilage_value = len(temp_violations) * 500
 
 c1, c2, c3, c4, c5, c6 = st.columns(6)
 
@@ -113,20 +113,17 @@ with left:
     ax.bar(["Correct", "Incorrect"], [correct, incorrect], color=["#22c55e", "#ef4444"])
     ax.set_ylabel("Number of SKUs")
     st.pyplot(fig)
-
     st.markdown("<div class='caption'><b>Insight:</b> Over 60% of SKUs violate temperature rules.</div>", unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
 with right:
     st.markdown('<div class="card">', unsafe_allow_html=True)
     cat_counts = high_risk_temp.groupby("temp_req").size().reset_index(name="count")
-
     fig, ax = plt.subplots()
     ax.bar(cat_counts["temp_req"], cat_counts["count"], color="#fb923c")
     ax.set_xlabel("Required Temperature Zone")
     ax.set_ylabel("Violations")
     st.pyplot(fig)
-
     st.markdown("<div class='caption'><b>Insight:</b> High-velocity SKUs dominate violations.</div>", unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -151,7 +148,7 @@ with a:
 
 with b:
     st.markdown('<div class="card">', unsafe_allow_html=True)
-    colors = ["#ef4444" if a == "B" else "#60a5fa" for a in avg_picker_load["aisle_id"]]
+    colors = ["#ef4444" if aisle == "B" else "#60a5fa" for aisle in avg_picker_load["aisle_id"]]
     fig, ax = plt.subplots()
     ax.bar(avg_picker_load["aisle_id"], avg_picker_load["avg_pickers"], color=colors)
     ax.set_xlabel("Aisle")
@@ -176,3 +173,4 @@ st.warning(
     "Forklift Constraint: Forklifts are restricted from entering Aisle B when more than "
     "two pickers are present, creating a dead-zone under peak load conditions."
 )
+
